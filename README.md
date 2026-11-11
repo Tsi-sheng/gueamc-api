@@ -1,63 +1,73 @@
 # Gueamc API
 
-> The versioned API contract for Gueamc server infrastructure.
+> The public API contract for Gueamc server infrastructure.
 
-## 项目定位
+## Project status
 
-Gueamc API 是 Gueamc 通用基础插件的接口契约，供 Gueamc Core 实现，并供经过授权的上层插件在编译阶段引用。
+This repository is **public** and is maintained independently from the private Gueamc Core implementation.
 
-API 与 Core 分离维护、独立版本化。API 描述调用方可以依赖的行为，不暴露 Core 的内部实现。
+The API is currently in the interface-design and initialization stage. No stable API release or production compatibility guarantee has been declared.
 
-## 职责范围
+**License status:** This repository currently has no `LICENSE` file. Public repository visibility allows the source to be viewed but does not grant permission to copy, modify, redistribute, or use it beyond rights provided by applicable law. A license will be selected and added after ownership and dependency review.
 
-API 可以包含：
+## Project positioning
 
-- 公共服务接口；
-- 事件与监听契约；
-- 稳定的公共数据类型；
-- 插件扩展点；
-- 版本与兼容性声明；
-- 必要的异常及结果类型。
+Gueamc API defines the public contracts exposed by the Gueamc infrastructure plugin. Gueamc Core implements these contracts and provides their runtime services.
 
-## 明确不包含
+Consumer plugins should compile against the API and must not depend on private Core implementation classes.
 
-- Gueamc Core 的内部实现；
-- 数据库驱动和内部持久化实现；
-- Oriri Tales 专属的经济、工业、领地、装备或世界观模型；
-- 不稳定的服务端内部类及未经验证的平台特定行为；
-- 密钥、服务器地址、生产环境配置或其他敏感信息。
+## Scope
 
-## 依赖关系
+The API may contain the following stable public contracts:
 
-- Gueamc Core 实现本 API。
-- 上层插件通过本 API 调用通用能力，不应依赖 Core 内部类。
-- API 不依赖 Gueamc Core。
-- API 不依赖 OriSurge 的业务插件。
+- Service interfaces and service lookup contracts;
+- Plugin lifecycle and extension contracts where cross-plugin use is required;
+- Events and listener contracts;
+- Public data types, results, and exceptions;
+- API and implementation compatibility metadata.
 
-运行时是否需要安装 Gueamc Core、API 类由哪个制品提供，以及插件加载顺序，应在正式运行时规范中明确。
+These are design boundaries, not a statement that every item has already been implemented.
 
-## 版本兼容
+## Dependency rules
 
-API 与 Core 分别发布版本。公共接口变更应经过兼容性评审，并记录迁移说明。
+- Gueamc Core implements Gueamc API.
+- Consumer plugins depend on Gueamc API, not on Gueamc Core internals.
+- Gueamc API must not depend on Gueamc Core.
+- Gueamc API must not contain Oriri Tales-specific business models.
+- Platform-specific types should be kept out of the API unless their use is explicitly required and documented.
 
-正式采用 Semantic Versioning 后：
+The runtime packaging model, plugin load order, and exact server-version compatibility must be documented and tested before a stable release.
 
-- PATCH：修复不改变公共契约的问题；
-- MINOR：增加向后兼容的公共能力；
-- MAJOR：引入破坏性接口变更。
+## Versioning and compatibility
 
-版本号不能替代实际兼容性测试。
+Gueamc API and Gueamc Core are versioned independently.
 
-## 发布与许可证
+Public contract changes require compatibility review and migration notes. Semantic Versioning is the intended versioning scheme once the first stable release is established:
 
-目标是将 Gueamc API 作为独立、可公开引用的接口项目发布。公开前需要完成代码权属、依赖许可证、源码内容及许可证文本审查。
+- PATCH: compatible fixes;
+- MINOR: backward-compatible additions;
+- MAJOR: breaking contract changes.
 
-在仓库迁移、公开发布和许可证确认完成前，本仓库仍为私有仓库；不得将“计划公开”理解为已经授予复制、修改或再分发权限。
+Version numbers do not replace compile-time, integration, and runtime compatibility tests.
 
-## 开发状态
+## Build and publication
 
-当前仓库处于接口设计与初始化阶段。尚未声明稳定 API 版本，也不提供生产兼容性保证。
+The Gradle project structure and publication coordinates have not yet been initialized. No Maven artifact is currently promised or published.
 
-## 维护原则
+Before publication, the project must establish:
 
-Gueamc API 由 Gueamc 项目维护者负责接口设计、合并审查、版本发布和兼容性策略。消费项目可以提出需求，但通用接口是否纳入由维护者根据复用价值与长期维护成本决定。
+- Java and Gradle toolchain baselines;
+- Stable package namespace and Maven coordinates;
+- API compatibility policy;
+- License and dependency review;
+- Release and artifact verification workflow.
+
+## Maintenance
+
+Gueamc API is a personal Gueamc project maintained by its owner. Consumer projects may propose API additions, but acceptance is based on general reuse value, stability, and long-term maintenance cost.
+
+## Related project
+
+- **Gueamc Core**: private implementation of this API.
+- **OriSurge / Oriri Tales**: a consumer of Gueamc capabilities under a separate usage authorization.
+
